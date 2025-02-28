@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Add these new styles */
+input, textarea {
+  color: black !important;
+  -webkit-text-fill-color: black !important;
+  background-color: white !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #666 !important;
+  -webkit-text-fill-color: #666 !important;
+}
