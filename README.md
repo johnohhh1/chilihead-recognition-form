@@ -1,8 +1,8 @@
-# Auburn Hills Chili's Above The Line Recognition
+# Auburn Hills Chili's Chilihead Recognition
 
 ## 🌶️ Celebrating Our Team's Excellence
 
-Welcome to the Auburn Hills Chili's Above The Line (ATL) Recognition platform - where we celebrate the heart and soul of our restaurant: our incredible team members who bring the Chili's spirit to life every day.
+Welcome to the Auburn Hills Chili's Chilihead Recognition platform - where we celebrate the heart and soul of our restaurant: our incredible team members who bring the Chili's spirit to life every day.
 
 ### Why Recognition Matters at 605
 
