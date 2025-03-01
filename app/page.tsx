@@ -90,19 +90,19 @@ export default function RecognitionForm() {
         {/* Form Inputs */}
         <form onSubmit={handleSubmit} className="absolute inset-0 flex flex-col justify-between p-4">
           {/* Recipient Name */}
-          <div className="absolute top-[210px] left-[100px] w-[500px]">
+          <div className="absolute top-[205px] left-[100px] w-[500px]">
             <label className="block text-lg font-bold text-gray-700">CHEERS TO YOU,</label>
             <input
               type="text"
               value={formData.recipientName}
               onChange={(e) => setFormData({...formData, recipientName: e.target.value})}
-              className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
+              className="w-full px-3 py-4 border-2 border-[#E31837] rounded text-lg leading-tight"
               required
             />
           </div>
 
           {/* Checkboxes (4 above the message) */}
-          <div className="absolute top-[270px] left-[100px] grid grid-cols-4 gap-4 text-black text-sm">
+          <div className="absolute top-[295px] left-[100px] grid grid-cols-4 gap-4 text-black text-sm">
             {[['guestCounts', 'EVERY GUEST/VIBE COUNTS'], ['playRestaurant', 'PLAY RESTAURANT'],
               ['foodDrink', 'FOOD & DRINK PERFECTION'], ['accountable', 'BE ACCOUNTABLE']].map(([key, label]) => (
               <div key={key} className="flex items-center gap-2">
@@ -126,7 +126,7 @@ export default function RecognitionForm() {
             <textarea
               value={formData.message}
               onChange={(e) => setFormData({...formData, message: e.target.value})}
-              className="w-full h-52 px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
+              className="w-full h-52 px-3 py-4 border-2 border-[#E31837] rounded text-lg leading-tight"
               required
             />
           </div>
