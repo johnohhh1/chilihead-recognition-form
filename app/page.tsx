@@ -96,7 +96,7 @@ export default function RecognitionForm() {
               type="text"
               value={formData.recipientName}
               onChange={(e) => setFormData({...formData, recipientName: e.target.value})}
-              className="w-full p-1 border rounded text-sm"
+              className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
               required
             />
           </div>
@@ -126,7 +126,7 @@ export default function RecognitionForm() {
             <textarea
               value={formData.message}
               onChange={(e) => setFormData({...formData, message: e.target.value})}
-              className="w-full h-52 p-1 border rounded text-sm"
+              className="w-full h-52 px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
               required
             />
           </div>
@@ -158,7 +158,7 @@ export default function RecognitionForm() {
                 type="text"
                 value={formData.signature}
                 onChange={(e) => setFormData({...formData, signature: e.target.value})}
-                className="w-full p-1 border rounded"
+                className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
                 required
               />
             </div>
@@ -168,7 +168,7 @@ export default function RecognitionForm() {
                 type="date"
                 value={formData.date}
                 onChange={(e) => setFormData({...formData, date: e.target.value})}
-                className="w-full p-1 border rounded"
+                className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
                 required
               />
             </div>
