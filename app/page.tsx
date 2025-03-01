@@ -53,7 +53,27 @@ export default function RecognitionForm() {
       const imageData = canvas.toDataURL('image/jpeg', 0.95);
       const filename = `ATL_Recognition_${new Date().toLocaleDateString('en-US').replace(/\//g, '-')}_${new Date().getTime()}.jpg`;
 
+       const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: imageData,
+          metadata: {
+            location: 'Auburn Hills',
+            timestamp: new Date().toISOString(),
+            filename: filename
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
       alert('Recognition form submitted successfully!');
+
     } catch (error) {
       console.error('Submission error:', error);
       alert('Error submitting form: ' + (error as Error).message);
@@ -166,4 +186,3 @@ export default function RecognitionForm() {
     </div>
   );
 }
-
