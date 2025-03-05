@@ -4,7 +4,7 @@ import { Readable } from 'stream';
 
 // Load credentials from Vercel environment variables
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY as string);
-const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID as string;
+const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID as string; // Uses the new folder ID
 
 export async function POST(request: Request) {
     try {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
             requestBody: {
                 name: filename,
                 mimeType: 'image/jpeg',
-                parents: [folderId] // Uses folder ID from env variable
+                parents: [folderId] // Uses the folder ID from Vercel
             },
             media: {
                 mimeType: 'image/jpeg',
