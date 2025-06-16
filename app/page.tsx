@@ -53,7 +53,7 @@ export default function RecognitionForm() {
       const imageData = canvas.toDataURL('image/jpeg', 0.95);
       const filename = `ATL_Recognition_${new Date().toLocaleDateString('en-US').replace(/\//g, '-')}_${new Date().getTime()}.jpg`;
 
-       const response = await fetch('/api/upload', {
+       const response = await fetch('/api/upload-photos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
