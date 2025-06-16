@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
     const base64Data = body.image.replace(/^data:image\/\w+;base64,/, '');
     const imageBuffer = Buffer.from(base64Data, 'base64');
-    const filename = body.filename || `upload_${Date.now()}.jpg`;
+    const filename = body.filename || body?.metadata?.filename || `upload_${Date.now()}.jpg`;
 
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_PHOTOS_CLIENT_ID,
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        albumId: body.albumId,
+        albumId: body.albumId || body?.metadata?.albumId,
         newMediaItems: [
           { simpleMediaItem: { uploadToken, fileName: filename } }
         ]
