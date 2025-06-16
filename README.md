@@ -77,3 +77,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Google Photos Integration
+
+Set the following environment variables to enable uploading recognition images to Google Photos:
+
+- `GOOGLE_PHOTOS_CLIENT_ID`
+- `GOOGLE_PHOTOS_CLIENT_SECRET`
+- `GOOGLE_PHOTOS_REFRESH_TOKEN`
+
+These credentials come from an OAuth 2.0 client with access to the Photos Library API. Create a `.env.local` file locally or configure them in your deployment platform.
+
+Images are sent to the `/api/upload-photos` endpoint which uploads the screenshot to your Google Photos library and optionally into the album specified by the request.
+
