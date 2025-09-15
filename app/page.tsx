@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 
 const backgrounds = [
-  '/atl_newgrn.jpg',
-  '/atl_newblu.jpg',
-  '/atl_newred.jpg',
-  '/atl_newyllo.jpg'
+  '/atl_newgrn.png',
+  '/atl_newblu.png',
+  '/atl_newred.png',
+  '/atl_newyllo.png'
 ];
 
 export default function RecognitionForm() {
