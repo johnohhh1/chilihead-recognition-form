@@ -1,4 +1,3 @@
-// app/api/upload-photos/route.ts
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 import { Readable } from 'stream';
@@ -15,33 +14,25 @@ export async function POST(request: Request) {
     const imageBuffer = Buffer.from(base64Data, 'base64');
     const filename = body.filename || body?.metadata?.filename || `ATL_Recognition_${Date.now()}.jpg`;
 
+    // Parse the service account JSON key
+    const serviceAccountKey = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '{}');
+
     // Setup Service Account authentication
     const auth = new google.auth.GoogleAuth({
-      credentials: {
-        type: 'service_account',
-        project_id: process.env.GOOGLE_PROJECT_ID,
-        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'), // Fix escaped newlines
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        auth_uri: 'https://accounts.google.com/o/oauth2/auth',
-        token_uri: 'https://oauth2.googleapis.com/token',
-        auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
-        client_x509_cert_url: process.env.GOOGLE_CERT_URL
-      },
+      credentials: serviceAccountKey,
       scopes: ['https://www.googleapis.com/auth/drive.file']
     });
 
     // Initialize Google Drive with service account
     const drive = google.drive({ version: 'v3', auth });
 
-    // Convert buffer to stream for Google Drive API
+    // Convert buffer to stream
     const stream = Readable.from(imageBuffer);
 
     // Upload file to Google Drive
     const fileMetadata = {
       name: filename,
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID || 'root'] // Optional: specify a folder
+      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID || 'root']
     };
 
     const media = {
@@ -55,20 +46,6 @@ export async function POST(request: Request) {
       fields: 'id, name, webViewLink'
     });
 
-    // If you need to share the file publicly or with specific users
-    if (process.env.GOOGLE_DRIVE_FOLDER_ID) {
-      // The folder permissions will be inherited
-    } else {
-      // Optionally make the file publicly viewable
-      await drive.permissions.create({
-        fileId: response.data.id!,
-        requestBody: {
-          role: 'reader',
-          type: 'anyone'
-        }
-      });
-    }
-
     return NextResponse.json({ 
       success: true, 
       fileId: response.data.id,
@@ -78,7 +55,6 @@ export async function POST(request: Request) {
 
   } catch (err: any) {
     console.error('Google Drive upload error:', err);
-    
     return NextResponse.json({ 
       error: err.message || 'Upload failed' 
     }, { status: 500 });
