@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 
 const backgrounds = [
-  '/atl_newblu.png',
-  '/atl_newyllo.png',
-  '/atl_newred.png',
-  '/atl_newgrn.png'
+  '/atl_newblu.jpg',
+  '/atl_newyllo.jpg',
+  '/atl_newred.jpg',
+  '/atl_newgrn.jpg'
 ];
 
 export default function RecognitionForm() {
@@ -44,15 +44,23 @@ export default function RecognitionForm() {
       const element = document.getElementById('capture-area');
       if (!element) return;
 
+      // Show loading state
+      console.log('Starting image capture...');
+
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        backgroundColor: null,
-        logging: false
+        backgroundColor: '#ffffff', // White background for JPEG
+        logging: false,
+        allowTaint: true,
+        imageTimeout: 15000
       });
 
-      const imageData = canvas.toDataURL('image/jpeg', 0.95);
+      // Convert to JPEG with compression
+      const imageData = canvas.toDataURL('image/jpeg', 0.9);
       const filename = `ATL_Recognition_${new Date().toLocaleDateString('en-US').replace(/\//g, '-')}_${new Date().getTime()}.jpg`;
+
+      console.log('Image captured, size:', Math.round(imageData.length / 1024), 'KB');
 
        const response = await fetch('/api/upload-photos', {
         method: 'POST',
@@ -70,9 +78,15 @@ export default function RecognitionForm() {
       });
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        // Try to get error details from response
+        const errorText = await response.text();
+        console.error('Upload failed with status:', response.status, 'Error:', errorText);
+        throw new Error(`Upload failed: ${response.status} - ${errorText || 'Unknown error'}`);
       }
 
+      const result = await response.json();
+      console.log('Upload successful:', result);
+      
       alert('Recognition form submitted successfully!');
       
       // Clear form after successful submission
