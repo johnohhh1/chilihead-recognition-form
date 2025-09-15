@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 
 const backgrounds = [
-  '/atl_newgrn.png',
   '/atl_newblu.png',
+  '/atl_newyllo.png',
   '/atl_newred.png',
-  '/atl_newyllo.png'
+  '/atl_newgrn.png'
 ];
 
 export default function RecognitionForm() {
@@ -47,7 +47,8 @@ export default function RecognitionForm() {
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: null,
+        logging: false
       });
 
       const imageData = canvas.toDataURL('image/jpeg', 0.95);
@@ -73,6 +74,24 @@ export default function RecognitionForm() {
       }
 
       alert('Recognition form submitted successfully!');
+      
+      // Clear form after successful submission
+      setFormData({
+        recipientName: '',
+        message: '',
+        signature: '',
+        date: '',
+        checkboxes: {
+          guestCounts: false,
+          playRestaurant: false,
+          foodDrink: false,
+          accountable: false,
+          engageTeam: false,
+          bringBack: false,
+          growSales: false,
+          increaseProfits: false
+        }
+      });
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -80,104 +99,146 @@ export default function RecognitionForm() {
     }
   };
 
+  // Input field styles to prevent text cutoff
+  const inputStyle = { 
+    paddingTop: '10px', 
+    paddingBottom: '14px',
+    lineHeight: '28px',
+    height: '52px',
+    fontSize: '18px'
+  };
+
+  const textareaStyle = { 
+    paddingTop: '12px', 
+    paddingBottom: '14px',
+    lineHeight: '30px',
+    fontSize: '18px'
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center py-8 bg-gray-50">
       <div 
         id="capture-area" 
-        className="relative w-[1100px] h-[850px] bg-cover bg-center p-0 overflow-hidden"
-        style={{ backgroundImage: `url(${backgrounds[backgroundIndex]})` }}
+        className="relative bg-contain bg-no-repeat bg-center"
+        style={{ 
+          backgroundImage: `url(${backgrounds[backgroundIndex]})`,
+          width: '1152px',
+          height: '918px'
+        }}
       >
-        {/* Form Inputs */}
-        <form onSubmit={handleSubmit} className="absolute inset-0 flex flex-col justify-between p-4">
-          {/* Recipient Name */}
-          <div className="absolute top-[205px] left-[100px] w-[500px]">
-            <label className="block text-lg font-bold text-gray-700">CHEERS TO YOU,</label>
+        {/* Form Inputs - positioned within the gray form area */}
+        <form onSubmit={handleSubmit} className="absolute inset-0">
+          
+          {/* Recipient Name - positioned in the upper area of the form */}
+          <div className="absolute top-[240px] left-[120px] w-[520px]">
+            <label className="block text-lg font-bold text-gray-800 mb-2">CHEERS TO YOU,</label>
             <input
               type="text"
               value={formData.recipientName}
               onChange={(e) => setFormData({...formData, recipientName: e.target.value})}
-              className="w-full px-3 py-4 border-2 border-[#E31837] rounded text-lg leading-tight"
+              className="w-full px-4 border-2 border-[#E31837] rounded-md bg-white"
+              style={inputStyle}
+              placeholder="Enter recipient's name"
               required
             />
           </div>
 
-          {/* Checkboxes (4 above the message) */}
-          <div className="absolute top-[295px] left-[100px] grid grid-cols-4 gap-4 text-black text-sm">
-            {[['guestCounts', 'EVERY GUEST/VIBE COUNTS'], ['playRestaurant', 'PLAY RESTAURANT'],
-              ['foodDrink', 'FOOD & DRINK PERFECTION'], ['accountable', 'BE ACCOUNTABLE']].map(([key, label]) => (
-              <div key={key} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.checkboxes[key as keyof typeof formData.checkboxes]}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    checkboxes: {...formData.checkboxes, [key]: e.target.checked}
-                  })}
-                  className="w-5 h-5"
-                />
-                <label className="text-xs font-bold">{label}</label>
-              </div>
-            ))}
+          {/* Top Checkboxes - 4 values positioned above message */}
+          <div className="absolute top-[340px] left-[120px] right-[120px]">
+            <div className="grid grid-cols-4 gap-6">
+              {[
+                ['guestCounts', 'EVERY GUEST/VIBE COUNTS'],
+                ['playRestaurant', 'PLAY RESTAURANT'],
+                ['foodDrink', 'FOOD & DRINK PERFECTION'],
+                ['accountable', 'BE ACCOUNTABLE']
+              ].map(([key, label]) => (
+                <div key={key} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.checkboxes[key as keyof typeof formData.checkboxes]}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      checkboxes: {...formData.checkboxes, [key]: e.target.checked}
+                    })}
+                    className="w-5 h-5 accent-[#E31837]"
+                  />
+                  <label className="text-xs font-bold text-gray-800">{label}</label>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Recognition Message */}
-          <div className="absolute top-[320px] left-[100px] w-[900px]">
-            <label className="block text-md font-bold text-gray-700">Recognition Message:</label>
+          {/* Recognition Message - main text area */}
+          <div className="absolute top-[390px] left-[120px] right-[120px]">
+            <label className="block text-lg font-bold text-gray-800 mb-2">Recognition Message:</label>
             <textarea
               value={formData.message}
               onChange={(e) => setFormData({...formData, message: e.target.value})}
-              className="w-full h-52 px-3 py-4 border-2 border-[#E31837] rounded text-lg leading-tight"
+              className="w-full h-48 px-4 border-2 border-[#E31837] rounded-md resize-none bg-white"
+              style={textareaStyle}
+              placeholder="Write your recognition message here..."
               required
             />
           </div>
 
-          {/* Checkboxes (4 below the message) */}
-          <div className="absolute top-[620px] left-[100px] grid grid-cols-4 gap-4 text-black text-sm">
-            {[['engageTeam', 'ENGAGE TEAM MEMBERS'], ['bringBack', 'BRING BACK GUESTS'],
-              ['growSales', 'GROW SALES'], ['increaseProfits', 'INCREASE PROFITS']].map(([key, label]) => (
-              <div key={key} className="flex items-center gap-2">
+          {/* Bottom Checkboxes - 4 values positioned below message */}
+          <div className="absolute top-[640px] left-[120px] right-[120px]">
+            <div className="grid grid-cols-4 gap-6">
+              {[
+                ['engageTeam', 'ENGAGE TEAM MEMBERS'],
+                ['bringBack', 'BRING BACK GUESTS'],
+                ['growSales', 'GROW SALES'],
+                ['increaseProfits', 'INCREASE PROFITS']
+              ].map(([key, label]) => (
+                <div key={key} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={formData.checkboxes[key as keyof typeof formData.checkboxes]}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      checkboxes: {...formData.checkboxes, [key]: e.target.checked}
+                    })}
+                    className="w-5 h-5 accent-[#E31837]"
+                  />
+                  <label className="text-xs font-bold text-gray-800">{label}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Signature and Date - positioned at bottom of form area */}
+          <div className="absolute top-[700px] left-[120px] right-[120px]">
+            <div className="grid grid-cols-2 gap-8">
+              <div>
+                <label className="block text-lg font-bold text-gray-800 mb-2">WITH #CHILISLOVE,</label>
                 <input
-                  type="checkbox"
-                  checked={formData.checkboxes[key as keyof typeof formData.checkboxes]}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    checkboxes: {...formData.checkboxes, [key]: e.target.checked}
-                  })}
-                  className="w-5 h-5"
+                  type="text"
+                  value={formData.signature}
+                  onChange={(e) => setFormData({...formData, signature: e.target.value})}
+                  className="w-full px-4 border-2 border-[#E31837] rounded-md bg-white"
+                  style={inputStyle}
+                  placeholder="Your name"
+                  required
                 />
-                <label className="text-xs font-bold">{label}</label>
               </div>
-            ))}
-          </div>
-
-          {/* Signature and Date */}
-          <div className="absolute top-[680px] left-[100px] grid grid-cols-2 gap-80 text-sm">
-            <div>
-              <label className="block text-lg font-bold text-gray-700">WITH #CHILISLOVE,</label>
-              <input
-                type="text"
-                value={formData.signature}
-                onChange={(e) => setFormData({...formData, signature: e.target.value})}
-                className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
-                required
-              />
-            </div>
-            <div>
-              <label className="block font-bold text-gray-700">DATE</label>
-              <input
-                type="date"
-                value={formData.date}
-                onChange={(e) => setFormData({...formData, date: e.target.value})}
-                className="w-full px-3 py-2 border-2 border-[#E31837] rounded text-lg leading-tight"
-                required
-              />
+              <div>
+                <label className="block text-lg font-bold text-gray-800 mb-2">DATE</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData({...formData, date: e.target.value})}
+                  className="w-full px-4 border-2 border-[#E31837] rounded-md bg-white"
+                  style={inputStyle}
+                  required
+                />
+              </div>
             </div>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button - positioned below the form area */}
           <button
             type="submit"
-            className="absolute bottom-[30px] left-[100px] w-[900px] bg-red-600 text-white py-3 rounded font-bold hover:bg-red-700 transition-colors text-md"
+            className="absolute bottom-[40px] left-[120px] right-[120px] bg-[#E31837] text-white py-4 rounded-md font-bold hover:bg-red-700 transition-colors text-lg shadow-lg"
           >
             Submit Recognition
           </button>
